@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const router = require('./routes/authRoutes.js')
 
 const app = express()
 const DbSession = require('./config/db.js')
@@ -8,9 +9,8 @@ const port = process.env.PORT||5000
 
 app.use(express.json())
 
-app.use('/' , (req , res)=>{
-    res.send('anni good')
-})
+
+app.use('/api/auth' , router)
 
 DbSession().then(() => {
     app.listen(port, () => {
