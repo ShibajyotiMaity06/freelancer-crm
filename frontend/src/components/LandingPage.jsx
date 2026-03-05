@@ -1,35 +1,28 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  ArrowRight, 
-  Play, 
-  Check, 
-  ChevronRight,
-  TrendingUp,
-  LayoutDashboard,
-  Bell,
-  CreditCard,
-  Clock,
-  Github,
-  Twitter,
-  Linkedin
+  ArrowRight, Play, Check, ChevronRight, TrendingUp, 
+  LayoutDashboard, Bell, CreditCard, Clock, Github, 
+  Twitter, Linkedin, Star, Zap, Users, Sparkles
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-// Refined FadeIn Animation
-const FadeIn = ({ children, delay = 0, direction = 'up', className = '' }) => {
+// Enhanced FadeIn with scale option
+const FadeIn = ({ children, delay = 0, direction = 'up', scale = false, className = '' }) => {
   const directions = {
-    up: { y: 30, x: 0 },
-    down: { y: -30, x: 0 },
-    left: { x: 30, y: 0 },
-    right: { x: -30, y: 0 },
+    up: { y: 40, x: 0 },
+    down: { y: -40, x: 0 },
+    left: { x: 40, y: 0 },
+    right: { x: -40, y: 0 },
+    none: { x: 0, y: 0 }
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, ...directions[direction] }}
-      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      initial={{ opacity: 0, ...directions[direction], scale: scale ? 0.9 : 1 }}
+      whileInView={{ opacity: 1, x: 0, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.8, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
+      transition={{ duration: 0.7, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
       className={className}
     >
       {children}
@@ -37,29 +30,53 @@ const FadeIn = ({ children, delay = 0, direction = 'up', className = '' }) => {
   );
 };
 
+// Floating element animation for the mockup
+const FloatingElement = ({ children, delay = 0, yOffset = 15 }) => (
+  <motion.div
+    animate={{ y: [0, -yOffset, 0] }}
+    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay }}
+  >
+    {children}
+  </motion.div>
+);
+
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-[#030303] text-zinc-50 font-sans selection:bg-white/20 selection:text-white overflow-hidden relative">
+    <div className="min-h-screen bg-[#050505] text-zinc-50 font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-hidden relative">
       
-      {/* Subtle Ambient Background */}
-      <div className="fixed inset-0 z-0 pointer-events-none flex justify-center items-start">
-        <div className="w-[800px] h-[500px] bg-indigo-500/10 blur-[150px] rounded-full mt-[-200px]" />
+      {/* Dynamic Backgrounds */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        {/* Subtle Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+        
+        {/* Breathing Orbs */}
+        <motion.div 
+          animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[-20%] left-[-10%] w-[800px] h-[600px] bg-indigo-600/20 blur-[120px] rounded-full mix-blend-screen" 
+        />
+        <motion.div 
+          animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute top-[20%] right-[-10%] w-[600px] h-[600px] bg-violet-600/10 blur-[120px] rounded-full mix-blend-screen" 
+        />
       </div>
 
-      {/* Seamless Sticky Navigation */}
-      <nav className="sticky top-0 left-0 right-0 z-50 bg-[#030303]/40 backdrop-blur-xl">
+      {/* Glassmorphism Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#050505]/60 backdrop-blur-xl border-b border-white/[0.05]">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2 cursor-pointer group">
-            <div className="w-7 h-7 rounded-md bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-              <TrendingUp size={16} className="text-white" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-[0_0_15px_rgba(99,102,241,0.5)] group-hover:shadow-[0_0_25px_rgba(99,102,241,0.7)] transition-all duration-300">
+              <TrendingUp size={18} className="text-white" />
             </div>
-            <span className="text-lg font-medium tracking-tight text-zinc-100">FlowCRM</span>
+            <span className="text-xl font-semibold tracking-tight text-white">FlowCRM</span>
           </div>
           <div className="flex items-center gap-6">
-            <button className="hidden sm:block text-sm font-normal text-zinc-400 hover:text-white transition-colors cursor-pointer">
-              Login
+            <button className="hidden sm:block text-sm font-medium text-zinc-400 hover:text-white transition-colors cursor-pointer">
+              <Link to="/login">Login</Link>
+              
             </button>
-            <button className="px-4 py-2 text-sm font-medium bg-white text-black hover:bg-zinc-200 transition-all rounded-full cursor-pointer hover:scale-105 active:scale-95">
+            <button className="px-5 py-2 text-sm font-semibold bg-white text-black hover:bg-zinc-200 transition-all rounded-full cursor-pointer hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
               Get Started
             </button>
           </div>
@@ -67,324 +84,335 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative z-10 pt-32 pb-24 px-6 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+      <section className="relative z-10 pt-40 pb-24 px-6 max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
         <div className="flex-1 text-center lg:text-left">
           <FadeIn>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] text-zinc-400 text-xs font-medium mb-8 cursor-pointer hover:bg-white/[0.06] transition-colors">
-              <span className="flex h-1.5 w-1.5 rounded-full bg-indigo-500"></span>
-              The CRM built for independent earners
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold mb-8 cursor-pointer hover:bg-indigo-500/20 transition-colors shadow-[0_0_15px_rgba(99,102,241,0.15)]">
+              <Sparkles size={14} className="text-indigo-400" />
+              FlowCRM 2.0 is now live
             </div>
           </FadeIn>
           
           <FadeIn delay={0.1}>
-            <h1 className="text-5xl sm:text-6xl lg:text-[5rem] font-medium tracking-tighter leading-[1.05] mb-6 text-zinc-100">
+            <h1 className="text-5xl sm:text-6xl lg:text-[5.5rem] font-bold tracking-tighter leading-[1.1] mb-6 text-white">
               Stop losing <br className="hidden lg:block" />
-              <span className="text-zinc-500">freelance deals.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-400 to-cyan-400">
+                freelance deals.
+              </span>
             </h1>
           </FadeIn>
           
           <FadeIn delay={0.2}>
-            <p className="text-lg font-light text-zinc-400 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            <p className="text-lg md:text-xl font-light text-zinc-400 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
               Track leads, automate follow-ups, and forecast your revenue in one remarkably simple dashboard designed for creatives.
             </p>
           </FadeIn>
           
-          <FadeIn delay={0.3} className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-            <button className="w-full sm:w-auto px-6 py-3 bg-white text-black rounded-full font-medium transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
-              Start for free <ArrowRight size={16} />
+          <FadeIn delay={0.3} className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-10">
+            <button className="w-full sm:w-auto px-8 py-3.5 bg-white text-black rounded-full font-semibold transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_30px_rgba(255,255,255,0.15)]">
+              Start for free <ArrowRight size={18} />
             </button>
-            <button className="w-full sm:w-auto px-6 py-3 bg-transparent hover:bg-white/[0.03] border border-zinc-800 text-zinc-300 rounded-full font-medium transition-all flex items-center justify-center gap-2 cursor-pointer">
-              <Play size={16} className="fill-current text-zinc-400" /> Watch demo
+            <button className="w-full sm:w-auto px-8 py-3.5 bg-zinc-900/50 hover:bg-zinc-800 border border-white/10 text-white rounded-full font-medium transition-all flex items-center justify-center gap-2 cursor-pointer backdrop-blur-sm group">
+              <div className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                <Play size={12} className="fill-current text-white ml-0.5" /> 
+              </div>
+              Watch demo
             </button>
+          </FadeIn>
+
+          {/* Social Proof */}
+          <FadeIn delay={0.4} className="flex items-center justify-center lg:justify-start gap-4">
+            <div className="flex -space-x-3">
+              {[33, 12, 44, 65].map((img, i) => (
+                <img key={i} src={`https://i.pravatar.cc/100?img=${img}`} alt="user" className="w-10 h-10 rounded-full border-2 border-[#050505] shadow-lg" />
+              ))}
+            </div>
+            <div className="flex flex-col">
+              <div className="flex text-yellow-400">
+                {[...Array(5)].map((_, i) => <Star key={i} size={14} className="fill-current" />)}
+              </div>
+              <span className="text-xs text-zinc-400 font-medium mt-0.5">Trusted by 2,000+ freelancers</span>
+            </div>
           </FadeIn>
         </div>
 
-        {/* Realistic Dashboard UI Mockup */}
-        <FadeIn delay={0.4} direction="left" className="flex-1 w-full max-w-2xl relative">
-          <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 to-transparent blur-[60px] rounded-full" />
+        {/* Enhanced 3D Dashboard UI Mockup */}
+        <FadeIn delay={0.5} direction="left" scale className="flex-1 w-full max-w-2xl relative perspective-1000">
+          <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/20 via-violet-500/10 to-transparent blur-[80px] rounded-full" />
           
-          <div className="relative rounded-2xl border border-white/[0.08] bg-[#09090b]/90 backdrop-blur-2xl shadow-2xl overflow-hidden flex flex-col h-[420px] cursor-default">
+          <div className="relative rounded-2xl border border-white/10 bg-[#09090b]/80 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-visible flex flex-col h-[450px] cursor-default transform rotate-y-[-5deg] rotate-x-[5deg] hover:rotate-y-0 hover:rotate-x-0 transition-transform duration-700 ease-out">
+            
             {/* Window Header */}
-            <div className="h-12 border-b border-white/[0.05] flex items-center px-4 justify-between bg-white/[0.01]">
-              <div className="flex gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-                <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
-                <div className="w-2.5 h-2.5 rounded-full bg-zinc-700" />
+            <div className="h-12 border-b border-white/[0.05] flex items-center px-4 justify-between bg-white/[0.02]">
+              <div className="flex gap-2">
+                <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                <div className="w-3 h-3 rounded-full bg-green-500/80" />
               </div>
-              <div className="text-xs font-medium text-zinc-500 flex items-center gap-4">
-                <span>Pipeline</span>
-                <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400">Target: $10k</span>
-              </div>
-              <div className="w-6 h-6 rounded-full bg-zinc-800 border border-white/10 overflow-hidden">
-                <img src="https://i.pravatar.cc/100?img=33" alt="user" className="w-full h-full object-cover opacity-80" />
+              <div className="flex space-x-2">
+                <div className="h-4 w-32 bg-white/5 rounded-full"></div>
               </div>
             </div>
             
-            {/* Dashboard Content */}
-            <div className="flex-1 p-5 flex gap-4 overflow-hidden bg-[#09090b]">
-              
-              {/* Column 1 */}
-              <div className="flex-1 flex flex-col gap-3 min-w-[200px]">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-medium text-zinc-400">Inbound (2)</span>
-                  <span className="text-[10px] text-zinc-600">$6,500</span>
+            {/* Dashboard Content - Simplified for visual impact */}
+            <div className="flex-1 p-6 bg-gradient-to-b from-white/[0.02] to-transparent relative">
+              <div className="flex justify-between items-end mb-6">
+                <div>
+                  <h3 className="text-white font-medium mb-1">Revenue Pipeline</h3>
+                  <div className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-500">$18,500</div>
                 </div>
-                
-                {/* Real Card 1 */}
-                <div className="bg-[#121214] rounded-xl border border-white/[0.05] p-3 flex flex-col gap-3 hover:border-white/[0.1] transition-colors cursor-pointer">
-                  <div className="flex justify-between items-start">
-                    <span className="text-sm font-medium text-zinc-200">Nike Redesign</span>
-                    <span className="text-xs font-medium text-zinc-400">$4,500</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <span className="px-1.5 py-0.5 bg-blue-500/10 text-blue-400 text-[9px] rounded font-medium">Web Design</span>
-                  </div>
-                  <div className="mt-1 flex items-center gap-1.5 text-[10px] text-zinc-500">
-                    <Clock size={10} /> Follow up today
-                  </div>
-                </div>
-
-                {/* Real Card 2 */}
-                <div className="bg-[#121214] rounded-xl border border-white/[0.05] p-3 flex flex-col gap-3 hover:border-white/[0.1] transition-colors cursor-pointer">
-                  <div className="flex justify-between items-start">
-                    <span className="text-sm font-medium text-zinc-200">Acme Branding</span>
-                    <span className="text-xs font-medium text-zinc-400">$2,000</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <span className="px-1.5 py-0.5 bg-purple-500/10 text-purple-400 text-[9px] rounded font-medium">Logo</span>
-                  </div>
-                  <div className="mt-1 flex items-center gap-1.5 text-[10px] text-zinc-600">
-                    Received 2d ago
-                  </div>
+                <div className="px-3 py-1.5 rounded-lg bg-green-500/10 text-green-400 text-xs font-semibold flex items-center gap-1 border border-green-500/20">
+                  <TrendingUp size={12} /> +24% this month
                 </div>
               </div>
 
-              {/* Column 2 */}
-              <div className="flex-1 flex flex-col gap-3 min-w-[200px]">
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-xs font-medium text-zinc-400">Proposal Sent (1)</span>
-                  <span className="text-[10px] text-zinc-600">$8,000</span>
-                </div>
-                
-                {/* Real Card 3 */}
-                <div className="bg-[#121214] rounded-xl border border-indigo-500/20 p-3 flex flex-col gap-3 relative overflow-hidden cursor-pointer hover:border-indigo-500/40 transition-colors">
-                  <div className="absolute top-0 left-0 w-[2px] h-full bg-indigo-500" />
-                  <div className="flex justify-between items-start">
-                    <span className="text-sm font-medium text-zinc-200">Stripe Integration</span>
-                    <span className="text-xs font-medium text-zinc-400">$8,000</span>
+              {/* Fake UI Cards */}
+              <div className="space-y-3">
+                {[
+                  { title: "Nike Redesign", val: "$4,500", tag: "Web", color: "blue" },
+                  { title: "Acme Branding", val: "$2,000", tag: "Logo", color: "purple" }
+                ].map((item, i) => (
+                  <div key={i} className="bg-white/[0.03] border border-white/[0.05] rounded-xl p-4 flex justify-between items-center hover:bg-white/[0.06] transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-10 h-10 rounded-lg bg-${item.color}-500/20 flex items-center justify-center border border-${item.color}-500/30`}>
+                        <Zap size={18} className={`text-${item.color}-400`} />
+                      </div>
+                      <div>
+                        <div className="text-sm font-medium text-white mb-1">{item.title}</div>
+                        <div className={`text-[10px] font-semibold text-${item.color}-400 uppercase tracking-wider`}>{item.tag}</div>
+                      </div>
+                    </div>
+                    <div className="text-sm font-semibold text-zinc-300">{item.val}</div>
                   </div>
-                  <div className="flex gap-2">
-                    <span className="px-1.5 py-0.5 bg-green-500/10 text-green-400 text-[9px] rounded font-medium">Development</span>
-                  </div>
-                  <div className="mt-1 flex items-center gap-1.5 text-[10px] text-zinc-400">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" /> Awaiting signature
-                  </div>
-                </div>
+                ))}
               </div>
-
             </div>
+
+            {/* Floating Notification */}
+            <div className="absolute -right-12 top-24 z-20 hidden md:block">
+              <FloatingElement delay={0}>
+                <div className="bg-zinc-900 border border-white/10 p-4 rounded-xl shadow-2xl flex items-center gap-4 backdrop-blur-xl">
+                  <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                    <Check size={20} className="text-green-400" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-white">Invoice Paid</div>
+                    <div className="text-xs text-zinc-400">Stripe Integration • $8,000</div>
+                  </div>
+                </div>
+              </FloatingElement>
+            </div>
+
+            {/* Floating Reminder */}
+            <div className="absolute -left-8 bottom-12 z-20 hidden md:block">
+              <FloatingElement delay={1} yOffset={10}>
+                <div className="bg-indigo-600 border border-indigo-400 p-3 rounded-xl shadow-[0_10px_30px_rgba(79,70,229,0.3)] flex items-center gap-3">
+                  <Bell size={16} className="text-white" />
+                  <span className="text-xs font-semibold text-white">Follow up with Sarah</span>
+                </div>
+              </FloatingElement>
+            </div>
+
           </div>
         </FadeIn>
       </section>
 
-      {/* Problem Section (Minimal Grid) */}
-      <section className="relative z-10 py-24 border-y border-white/[0.04] bg-[#050505]">
-        <div className="max-w-7xl mx-auto px-6">
-          <FadeIn className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-medium tracking-tight text-zinc-100 mb-3">You're a creative, not an admin.</h2>
-            <p className="text-zinc-500 font-light text-lg">Spreadsheets kill momentum. Stop dealing with:</p>
-          </FadeIn>
-          
-          <div className="grid md:grid-cols-4 gap-px bg-white/[0.04] border border-white/[0.04] rounded-2xl overflow-hidden">
-            {[
-              { title: "Lost Follow-ups", desc: "Leads go cold because you missed an email." },
-              { title: "Messy Spreadsheets", desc: "Scrolling rows trying to find project statuses." },
-              { title: "Missing Payments", desc: "Delivering work but forgetting the invoice." },
-              { title: "Zero Predictability", desc: "Never knowing your revenue next month." }
-            ].map((item, i) => (
-              <FadeIn key={i} delay={i * 0.1} className="bg-[#030303] p-8 hover:bg-white/[0.02] transition-colors cursor-default">
-                <h3 className="text-base font-medium text-zinc-200 mb-2">{item.title}</h3>
-                <p className="text-zinc-500 text-sm font-light leading-relaxed">{item.desc}</p>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Bento Grid */}
+      {/* Features Bento Grid - Enhanced */}
       <section className="relative z-10 py-32 px-6 max-w-7xl mx-auto">
-        <div className="mb-16 max-w-2xl">
+        <div className="mb-20 text-center max-w-3xl mx-auto">
           <FadeIn>
-            <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-zinc-100 mb-4">Everything you need. <br/>Nothing you don't.</h2>
-            <p className="text-zinc-400 font-light text-lg leading-relaxed">FlowCRM strips away enterprise bloat, giving you an elegant interface focused purely on closing deals and getting paid.</p>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6">
+              Everything you need.<br/>
+              <span className="text-zinc-500">Nothing you don't.</span>
+            </h2>
+            <p className="text-zinc-400 text-lg leading-relaxed">
+              FlowCRM strips away enterprise bloat, giving you a beautiful interface focused purely on closing deals and getting paid.
+            </p>
           </FadeIn>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-4 auto-rows-[250px]">
-          {/* Bento Item 1 */}
-          <FadeIn delay={0.1} className="md:col-span-2 bg-[#09090b] rounded-3xl border border-white/[0.06] p-8 flex flex-col justify-between hover:border-white/[0.12] transition-colors cursor-pointer group">
-            <div>
-              <LayoutDashboard className="text-zinc-400 mb-4 group-hover:text-indigo-400 transition-colors" size={24} />
-              <h3 className="text-xl font-medium text-zinc-100 mb-2">Visual Kanban Pipeline</h3>
-              <p className="text-zinc-500 text-sm font-light max-w-md">Drag and drop leads effortlessly. Always know exactly where every potential project stands at a glance.</p>
-            </div>
-            <div className="mt-6 h-12 w-full border-t border-white/[0.05] flex items-center text-xs text-zinc-600 font-medium">
-              Explore Pipeline <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
-            </div>
-          </FadeIn>
-
-          {/* Bento Item 2 */}
-          <FadeIn delay={0.2} className="bg-[#09090b] rounded-3xl border border-white/[0.06] p-8 flex flex-col justify-between hover:border-white/[0.12] transition-colors cursor-pointer group">
-            <div>
-              <TrendingUp className="text-zinc-400 mb-4 group-hover:text-green-400 transition-colors" size={24} />
-              <h3 className="text-xl font-medium text-zinc-100 mb-2">Revenue Forecasting</h3>
-              <p className="text-zinc-500 text-sm font-light">See your expected income automatically calculated.</p>
+        <div className="grid md:grid-cols-3 gap-6 auto-rows-[280px]">
+          {/* Bento 1 */}
+          <FadeIn delay={0.1} className="md:col-span-2 group relative bg-zinc-900/50 backdrop-blur-sm rounded-3xl border border-white/10 p-8 overflow-hidden hover:border-indigo-500/50 transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10 flex flex-col h-full justify-between">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                  <LayoutDashboard className="text-indigo-400" size={24} />
+                </div>
+                <h3 className="text-2xl font-semibold text-white mb-3">Visual Pipeline</h3>
+                <p className="text-zinc-400 text-sm max-w-md leading-relaxed">Drag and drop leads effortlessly. Always know exactly where every potential project stands at a glance.</p>
+              </div>
+              <div className="flex items-center text-sm text-indigo-400 font-semibold group-hover:translate-x-2 transition-transform cursor-pointer">
+                Explore Pipeline <ArrowRight size={16} className="ml-2" />
+              </div>
             </div>
           </FadeIn>
 
-          {/* Bento Item 3 */}
-          <FadeIn delay={0.3} className="bg-[#09090b] rounded-3xl border border-white/[0.06] p-8 flex flex-col justify-between hover:border-white/[0.12] transition-colors cursor-pointer group">
-            <div>
-              <Bell className="text-zinc-400 mb-4 group-hover:text-blue-400 transition-colors" size={24} />
-              <h3 className="text-xl font-medium text-zinc-100 mb-2">Smart Reminders</h3>
-              <p className="text-zinc-500 text-sm font-light">Gentle nudges to follow up at the perfect time.</p>
-            </div>
-          </FadeIn>
-
-          {/* Bento Item 4 */}
-          <FadeIn delay={0.4} className="md:col-span-2 bg-[#09090b] rounded-3xl border border-white/[0.06] p-8 flex flex-col justify-between hover:border-white/[0.12] transition-colors cursor-pointer group overflow-hidden relative">
+          {/* Bento 2 */}
+          <FadeIn delay={0.2} className="group relative bg-zinc-900/50 backdrop-blur-sm rounded-3xl border border-white/10 p-8 overflow-hidden hover:border-green-500/50 transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="relative z-10">
-              <CreditCard className="text-zinc-400 mb-4 group-hover:text-indigo-400 transition-colors" size={24} />
-              <h3 className="text-xl font-medium text-zinc-100 mb-2">Payment Tracking</h3>
-              <p className="text-zinc-500 text-sm font-light max-w-md">Link milestones to invoices. Ensure you never deliver final files without getting paid first.</p>
+              <div className="w-12 h-12 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                <TrendingUp className="text-green-400" size={24} />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">Forecasting</h3>
+              <p className="text-zinc-400 text-sm leading-relaxed">See your expected income automatically calculated based on win probabilities.</p>
             </div>
-            {/* Abstract visual */}
-            <div className="absolute right-[-10%] bottom-[-20%] w-64 h-64 border border-white/[0.04] rounded-full flex items-center justify-center group-hover:scale-105 transition-transform duration-700">
-              <div className="w-48 h-48 border border-white/[0.04] rounded-full" />
+          </FadeIn>
+
+          {/* Bento 3 */}
+          <FadeIn delay={0.3} className="group relative bg-zinc-900/50 backdrop-blur-sm rounded-3xl border border-white/10 p-8 overflow-hidden hover:border-amber-500/50 transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10">
+              <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform duration-500">
+                <Bell className="text-amber-400" size={24} />
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-3">Smart Alerts</h3>
+              <p className="text-zinc-400 text-sm leading-relaxed">Gentle nudges to follow up at the perfect time so no deal goes cold.</p>
+            </div>
+          </FadeIn>
+
+          {/* Bento 4 */}
+          <FadeIn delay={0.4} className="md:col-span-2 group relative bg-zinc-900/50 backdrop-blur-sm rounded-3xl border border-white/10 p-8 overflow-hidden hover:border-violet-500/50 transition-all duration-500">
+            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="relative z-10 w-2/3">
+              <div className="w-12 h-12 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                <CreditCard className="text-violet-400" size={24} />
+              </div>
+              <h3 className="text-2xl font-semibold text-white mb-3">Payment Tracking</h3>
+              <p className="text-zinc-400 text-sm leading-relaxed">Link milestones to invoices. Ensure you never deliver final files without getting paid first.</p>
+            </div>
+            {/* Decorative Element */}
+            <div className="absolute right-[-5%] bottom-[-20%] w-64 h-64 border-[1px] border-white/5 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:border-violet-500/20 transition-all duration-700">
+              <div className="w-48 h-48 border-[1px] border-white/5 rounded-full group-hover:border-violet-500/30 transition-colors duration-700 delay-100" />
+              <div className="absolute w-32 h-32 bg-violet-500/10 blur-[40px] rounded-full group-hover:bg-violet-500/20 transition-colors duration-700" />
             </div>
           </FadeIn>
         </div>
       </section>
 
-      {/* How it works (Minimal Process) */}
-      <section className="relative z-10 py-32 bg-[#050505] border-y border-white/[0.04]">
-        <div className="max-w-7xl mx-auto px-6">
-          <FadeIn className="mb-16">
-            <h2 className="text-3xl font-medium tracking-tight text-zinc-100">Fix your process in minutes.</h2>
-          </FadeIn>
-          
-          <div className="grid md:grid-cols-3 gap-12">
-            {[
-              { num: "01", title: "Dump the spreadsheet", desc: "Import your current leads and assign them a project value." },
-              { num: "02", title: "Move the cards", desc: "Simply drag deals across stages as you negotiate and close." },
-              { num: "03", title: "Watch revenue grow", desc: "Flow calculates your projected income automatically." }
-            ].map((item, i) => (
-              <FadeIn key={i} delay={i * 0.15} className="group cursor-default">
-                <div className="text-4xl font-light text-zinc-800 mb-6 group-hover:text-indigo-500 transition-colors duration-500">{item.num}</div>
-                <h3 className="text-lg font-medium text-zinc-200 mb-3">{item.title}</h3>
-                <p className="text-zinc-500 font-light text-sm leading-relaxed">{item.desc}</p>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing (Elegant Cards) */}
-      <section className="relative z-10 py-32 px-6 max-w-5xl mx-auto">
+      {/* Pricing - Upgraded */}
+      <section className="relative z-10 py-32 px-6 max-w-5xl mx-auto border-t border-white/5">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"></div>
+        
         <div className="text-center mb-20">
           <FadeIn>
-            <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-zinc-100 mb-4">Transparent pricing</h2>
-            <p className="text-zinc-500 font-light">Start free. Upgrade when your business demands it.</p>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-white mb-6">Simple, fair pricing</h2>
+            <p className="text-zinc-400 text-lg">Start free. Upgrade when your business demands it.</p>
           </FadeIn>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 items-stretch">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
           {/* Free Tier */}
-          <FadeIn direction="up" delay={0.1} className="bg-[#09090b] p-10 rounded-[2rem] border border-white/[0.06] hover:border-white/[0.12] transition-colors flex flex-col">
-            <h3 className="text-xl font-medium text-zinc-100 mb-2">Starter</h3>
-            <p className="text-zinc-500 text-sm font-light mb-8">For new freelancers finding their footing.</p>
-            <div className="mb-8 flex items-baseline gap-1">
-              <span className="text-4xl font-medium text-white">$0</span>
-              <span className="text-zinc-600 text-sm">/mo</span>
+          <FadeIn direction="up" delay={0.1} className="bg-zinc-900/40 p-10 rounded-[2.5rem] border border-white/5 hover:border-white/10 transition-colors flex flex-col backdrop-blur-sm">
+            <h3 className="text-2xl font-semibold text-white mb-2">Starter</h3>
+            <p className="text-zinc-500 text-sm mb-8">For new freelancers finding their footing.</p>
+            <div className="mb-8 flex items-end gap-2">
+              <span className="text-6xl font-bold text-white tracking-tighter">$0</span>
+              <span className="text-zinc-500 text-base font-medium mb-2">/mo</span>
             </div>
             <ul className="space-y-4 mb-10 flex-1">
               {['Up to 10 active leads', 'Basic Kanban board', 'Standard support'].map((feature, i) => (
-                <li key={i} className="flex items-center gap-3 text-sm text-zinc-400 font-light">
-                  <Check size={16} className="text-zinc-600" /> {feature}
+                <li key={i} className="flex items-center gap-3 text-zinc-300 font-medium">
+                  <div className="w-5 h-5 rounded-full bg-white/5 flex items-center justify-center">
+                    <Check size={12} className="text-zinc-400" />
+                  </div>
+                  {feature}
                 </li>
               ))}
             </ul>
-            <button className="w-full py-3 rounded-full border border-white/[0.1] hover:bg-white/[0.04] text-zinc-300 transition-all font-medium text-sm cursor-pointer active:scale-95">
+            <button className="w-full py-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all font-semibold cursor-pointer active:scale-95">
               Start for free
             </button>
           </FadeIn>
 
-          {/* Pro Tier */}
-          <FadeIn direction="up" delay={0.2} className="bg-zinc-900 p-10 rounded-[2rem] border border-zinc-700 relative flex flex-col shadow-2xl overflow-hidden">
-            <div className="absolute top-0 right-10 w-32 h-32 bg-indigo-500/20 blur-[50px]" />
-            <div className="relative z-10">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="text-xl font-medium text-white">Pro</h3>
-                <span className="px-2.5 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-[10px] font-medium tracking-wide uppercase">
-                  Popular
-                </span>
+          {/* Pro Tier (Highlighted) */}
+          <FadeIn direction="up" delay={0.2} className="relative group">
+            {/* Animated Glow Behind */}
+            <div className="absolute -inset-[2px] bg-gradient-to-br from-indigo-500 via-violet-500 to-cyan-500 rounded-[2.5rem] opacity-50 group-hover:opacity-100 blur-sm transition-opacity duration-500"></div>
+            
+            <div className="bg-[#0a0a0f] p-10 rounded-[2.5rem] relative flex flex-col shadow-2xl overflow-hidden h-full">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 blur-[80px]" />
+              
+              <div className="relative z-10">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="text-2xl font-semibold text-white">Pro</h3>
+                  <span className="px-3 py-1 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 text-white text-xs font-bold tracking-wide shadow-[0_0_15px_rgba(99,102,241,0.5)]">
+                    POPULAR
+                  </span>
+                </div>
+                <p className="text-zinc-400 text-sm mb-8">For established independent earners.</p>
+                <div className="mb-8 flex items-end gap-2">
+                  <span className="text-6xl font-bold text-white tracking-tighter">$12</span>
+                  <span className="text-zinc-500 text-base font-medium mb-2">/mo</span>
+                </div>
+                <ul className="space-y-4 mb-10 flex-1">
+                  {['Unlimited active leads', 'Revenue forecasting', 'Smart reminders', 'Priority 24/7 support'].map((feature, i) => (
+                    <li key={i} className="flex items-center gap-3 text-white font-medium">
+                      <div className="w-5 h-5 rounded-full bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
+                        <Check size={12} className="text-indigo-400" />
+                      </div>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+                <button className="w-full py-4 rounded-full bg-white text-black hover:bg-zinc-200 transition-all font-semibold shadow-[0_0_30px_rgba(255,255,255,0.2)] cursor-pointer active:scale-95 hover:scale-[1.02]">
+                  Get Pro
+                </button>
               </div>
-              <p className="text-zinc-400 text-sm font-light mb-8">For established independent earners.</p>
-              <div className="mb-8 flex items-baseline gap-1">
-                <span className="text-4xl font-medium text-white">$12</span>
-                <span className="text-zinc-500 text-sm">/mo</span>
-              </div>
-              <ul className="space-y-4 mb-10 flex-1">
-                {['Unlimited active leads', 'Revenue forecasting', 'Smart reminders', 'Priority support'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm text-zinc-300 font-light">
-                    <Check size={16} className="text-indigo-400" /> {feature}
-                  </li>
-                ))}
-              </ul>
-              <button className="w-full py-3 rounded-full bg-white text-black hover:bg-zinc-200 transition-all font-medium text-sm shadow-lg cursor-pointer active:scale-95">
-                Get Pro
-              </button>
             </div>
           </FadeIn>
         </div>
       </section>
 
-      {/* Final Minimal CTA */}
-      <section className="relative z-10 py-32 px-6">
-        <div className="max-w-3xl mx-auto text-center">
+      {/* High-Impact CTA */}
+      <section className="relative z-10 py-40 px-6 overflow-hidden">
+        {/* Background explosion */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-indigo-600/20 blur-[150px] rounded-full pointer-events-none" />
+        
+        <div className="max-w-4xl mx-auto text-center relative z-10 bg-zinc-900/40 border border-white/10 p-16 rounded-[3rem] backdrop-blur-xl shadow-2xl">
           <FadeIn>
-            <h2 className="text-4xl md:text-5xl font-medium tracking-tight text-white mb-6">
+            <h2 className="text-5xl md:text-6xl font-bold tracking-tighter text-white mb-6">
               Ready to take control?
             </h2>
-            <p className="text-lg text-zinc-500 font-light mb-10 max-w-xl mx-auto">
-              Join the freelancers who stopped letting deals slip through the cracks. Set up your workspace in 60 seconds.
+            <p className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto">
+              Join the top 1% of freelancers who stopped letting deals slip through the cracks. Set up your workspace in exactly 60 seconds.
             </p>
-            <button className="px-8 py-4 bg-white text-black hover:bg-zinc-200 rounded-full font-medium transition-all text-sm flex items-center gap-2 mx-auto cursor-pointer active:scale-95">
-              Create your account <ChevronRight size={16} />
-            </button>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <button className="px-8 py-4 bg-white text-black hover:bg-zinc-200 rounded-full font-bold transition-all flex items-center gap-2 cursor-pointer active:scale-95 hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+                Create your account <ChevronRight size={18} />
+              </button>
+            </div>
+            <p className="text-zinc-500 text-sm mt-6">No credit card required. 14-day free trial on Pro.</p>
           </FadeIn>
         </div>
       </section>
 
-      {/* Minimal Footer */}
-      <footer className="relative z-10 border-t border-white/[0.04] pt-12 pb-8 px-6 bg-[#030303]">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center gap-2 cursor-pointer">
-            <TrendingUp size={16} className="text-zinc-400" />
-            <span className="text-sm font-medium tracking-tight text-zinc-300">FlowCRM</span>
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-white/10 pt-16 pb-8 px-6 bg-[#030303]">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-2 cursor-pointer group">
+             <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-indigo-500/20 transition-colors duration-300">
+              <TrendingUp size={18} className="text-zinc-400 group-hover:text-indigo-400" />
+            </div>
+            <span className="text-lg font-semibold tracking-tight text-white">FlowCRM</span>
           </div>
           
-          <div className="flex flex-wrap justify-center gap-8 text-sm font-light text-zinc-500">
-            <a href="#" className="hover:text-zinc-200 transition-colors cursor-pointer">About</a>
-            <a href="#" className="hover:text-zinc-200 transition-colors cursor-pointer">Privacy</a>
-            <a href="#" className="hover:text-zinc-200 transition-colors cursor-pointer">Terms</a>
+          <div className="flex flex-wrap justify-center gap-8 text-sm font-medium text-zinc-500">
+            {['About', 'Blog', 'Careers', 'Privacy', 'Terms'].map(link => (
+              <a key={link} href="#" className="hover:text-white transition-colors cursor-pointer">{link}</a>
+            ))}
           </div>
 
-          <div className="flex items-center gap-5 text-zinc-600">
-            <a href="#" className="hover:text-zinc-300 transition-colors cursor-pointer"><Twitter size={18} /></a>
-            <a href="#" className="hover:text-zinc-300 transition-colors cursor-pointer"><Github size={18} /></a>
-            <a href="#" className="hover:text-zinc-300 transition-colors cursor-pointer"><Linkedin size={18} /></a>
+          <div className="flex items-center gap-5 text-zinc-500">
+            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 hover:text-white transition-all cursor-pointer"><Twitter size={18} /></a>
+            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 hover:text-white transition-all cursor-pointer"><Github size={18} /></a>
+            <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 hover:text-white transition-all cursor-pointer"><Linkedin size={18} /></a>
           </div>
+        </div>
+        <div className="max-w-7xl mx-auto text-center text-zinc-700 text-xs mt-12 font-medium">
+          © {new Date().getFullYear()} FlowCRM Inc. All rights reserved.
         </div>
       </footer>
 
