@@ -6,8 +6,8 @@ import {
   Twitter, Linkedin, Star, Zap, Users, Sparkles
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useState,useEffect } from 'react';
 
-// Enhanced FadeIn with scale option
 const FadeIn = ({ children, delay = 0, direction = 'up', scale = false, className = '' }) => {
   const directions = {
     up: { y: 40, x: 0 },
@@ -41,6 +41,23 @@ const FloatingElement = ({ children, delay = 0, yOffset = 15 }) => (
 );
 
 const LandingPage = () => {
+  const [auth, setAuth] = useState({ token: null, userf: null });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("userf");
+
+    if (token && username) {
+      setAuth({ token: token, userf: JSON.parse(username) });
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userf");
+    setAuth({ token: null, userf: null });
+  };
+
   return (
     <div className="min-h-screen bg-[#050505] text-zinc-50 font-sans selection:bg-indigo-500/30 selection:text-indigo-200 overflow-hidden relative">
       
@@ -72,11 +89,34 @@ const LandingPage = () => {
             <span className="text-xl font-semibold tracking-tight text-white">FlowCRM</span>
           </div>
           <div className="flex items-center gap-6">
-            <button className="hidden sm:block text-sm font-medium text-zinc-400 hover:text-white transition-colors cursor-pointer">
-              <Link to="/login">Login</Link>
-              
-            </button>
-            <button className="px-5 py-2 text-sm font-semibold bg-white text-black hover:bg-zinc-200 transition-all rounded-full cursor-pointer hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+            {auth.token ? (
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-medium text-zinc-300">
+                  Hi, <span className="text-white font-semibold">{auth.userf.username}</span> 👋
+                </span>
+                <button 
+                  className="text-sm font-medium text-zinc-400 hover:text-white transition-colors cursor-pointer px-3 py-1 rounded-lg hover:bg-zinc-800/50"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button className="hidden sm:block text-sm font-medium text-zinc-400 hover:text-white transition-colors cursor-pointer">
+                <Link to="/login">Login</Link>
+              </button>
+            )}
+            
+            <button 
+              className="px-5 py-2 text-sm font-semibold bg-white text-black hover:bg-zinc-200 transition-all rounded-full cursor-pointer hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+              onClick={() => {
+                if (auth.token) {
+                  window.location.href = '/dashboard';
+                } else {
+                  window.location.href = '/login';
+                }
+              }}
+            >
               Get Started
             </button>
           </div>

@@ -19,6 +19,8 @@ function Register () {
       const data = await res.json()
       if (res.ok) {
         localStorage.setItem("token" , data.token)
+        localStorage.setItem("userf", JSON.stringify({ username: data.username }));
+
         navigate('/dashboard')
       } else {
         alert(data.message)
