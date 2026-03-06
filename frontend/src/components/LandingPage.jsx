@@ -419,10 +419,18 @@ const LandingPage = () => {
             <p className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto">
               Join the top 1% of freelancers who stopped letting deals slip through the cracks. Set up your workspace in exactly 60 seconds.
             </p>
+            
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button className="px-8 py-4 bg-white text-black hover:bg-zinc-200 rounded-full font-bold transition-all flex items-center gap-2 cursor-pointer active:scale-95 hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+              {auth.token ? (
+                 <button className="px-8 py-4 bg-white text-black hover:bg-zinc-200 rounded-full font-bold transition-all flex items-center gap-2 cursor-pointer active:scale-95 hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+                Lets Earn Together <ChevronRight size={18} />
+              </button>
+              ) : (
+                 <button className="px-8 py-4 bg-white text-black hover:bg-zinc-200 rounded-full font-bold transition-all flex items-center gap-2 cursor-pointer active:scale-95 hover:scale-105 shadow-[0_0_40px_rgba(255,255,255,0.3)]">
                 Create your account <ChevronRight size={18} />
               </button>
+              )}
+             
             </div>
             <p className="text-zinc-500 text-sm mt-6">No credit card required. 14-day free trial on Pro.</p>
           </FadeIn>
