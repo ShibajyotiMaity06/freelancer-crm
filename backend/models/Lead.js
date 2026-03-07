@@ -10,36 +10,31 @@ const LeadSchema = new mongoose.Schema(
         name : {
             type:String,
             required:true,
-            trime:true,
+            trim:true,
         },
         company : {
             type:String,
-            required:true,
-            trime:true
+            trim:true
         },
         source : {
             type:String,
-            required:true,
-            trime:true,
-            enum:["Linkedin" , "Twitter" , "Cold mailing" , "previous Client", "Upwork"],
-            default:"Twitter",
+            trim:true,
+            enum:["LinkedIn" , "Upwork" , "Referral" , "Cold Outreach", "Other"],
+            default:"Other",
         },
 
         dealValue:{
             type:Number,
             required:true,
-
         },
         status:{
             type:String,
-            required:true,
-            enum:["New" , "Porposal Sent" , "Negotiation" , "Closed Won" , "Closed Lost"],
+            enum:["New" , "Contacted" , "Proposal Sent" , "Negotiation" , "Won" , "Lost"],
             default:"New",
         },
         nextFollowUpDate:{
             type:Date,
             required:true,
-
         },
         notes:{
             type:String,
@@ -50,7 +45,6 @@ const LeadSchema = new mongoose.Schema(
     timestamps:true,
    } 
 )
-
 
 const Lead = mongoose.model("Lead" , LeadSchema)
 module.exports = Lead
