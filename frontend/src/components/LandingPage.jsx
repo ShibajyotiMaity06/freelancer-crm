@@ -111,7 +111,7 @@ const LandingPage = () => {
               className="px-5 py-2 text-sm font-semibold bg-white text-black hover:bg-zinc-200 transition-all rounded-full cursor-pointer hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
               onClick={() => {
                 if (auth.token) {
-                  window.location.href = '/dashboard';
+                  window.location.href = '/pipeline';
                 } else {
                   window.location.href = '/login';
                 }

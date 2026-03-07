@@ -6,7 +6,7 @@ const createLead = async (req , res) => {
         const {name , company , source , dealValue , status , nextFollowUpDate , notes} = req.body;
 
         if (!name || !dealValue || !nextFollowUpDate){
-            return res.status(400).json({message : "name , deal and next follow date required"})
+            return res.status(400).json({message : "name, dealValue and nextFollowUpDate required"})
         }
 
         const lead = await Lead.create({
@@ -24,26 +24,22 @@ const createLead = async (req , res) => {
     } catch(error) {
         res.status(500).json({message : error.message})
     }
-
 }
-
 
 const getLeads = async (req , res) => {
     try {
         const leads = await Lead.find({user:req.user._id}).sort({createdAt : -1})
-
         res.json(leads)
     } catch (error) {
         res.status(500).json({message:error.message})
     }
 }
 
-
 const getLeadById = async (req , res) => {
     try {
         const lead = await Lead.findOne({_id : req.params.id , user : req.user._id})
         if (!lead){
-            return res.status(404).json({message : 'no lead found , create first'})
+            return res.status(404).json({message : 'no lead found'})
         }
         res.json(lead)
     } catch (error) {
@@ -53,10 +49,11 @@ const getLeadById = async (req , res) => {
 
 const updateLead = async (req , res) => {
     try {
-        const lead = await Lead.findOne({id : req.params.id , user:req.user._id})
+        // FIXED BUG: changed 'id' to '_id'
+        const lead = await Lead.findOne({_id : req.params.id , user:req.user._id})
 
         if (!lead){
-            return res.status(404).json({message : 'no lead found , create first'})
+            return res.status(404).json({message : 'no lead found'})
         }
 
         const allowedFields = ['name', 'company', 'source', 'dealValue', 'status', 'nextFollowUpDate', 'notes'];
@@ -70,14 +67,14 @@ const updateLead = async (req , res) => {
         res.json(updatedLead)
 
     } catch (error) {
-            res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 }
 
-
 const deleteLead = async (req , res) => {
     try {
-        const lead = await Lead.findByIdAndDelete({_id : req.params.id , user : req.user._id})
+        // FIXED BUG: changed findByIdAndDelete to findOneAndDelete to support multiple query params
+        const lead = await Lead.findOneAndDelete({_id : req.params.id , user : req.user._id})
 
         if (!lead){
             return res.status(404).json({message : 'no lead found'})

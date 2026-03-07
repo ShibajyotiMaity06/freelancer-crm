@@ -20,7 +20,7 @@ function Login () {
       if (res.ok) {
         localStorage.setItem("token" , data.token)
         localStorage.setItem("userf", JSON.stringify({ username: data.username }));
-        navigate('/dashboard')
+        navigate('/pipeline')
       } else {
         alert(data.message)
       }

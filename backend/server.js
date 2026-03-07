@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
-const router = require('./routes/authRoutes.js')
+const authrouter = require('./routes/authRoutes.js')
+const leadRouter = require('./routes/leadRoutes.js')
 const cors = require('cors')
 
 const app = express()
@@ -20,7 +21,9 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 
-app.use('/api/auth' , router)
+app.use('/api/auth' , authrouter)
+app.use('/api/leads' , leadRouter)
+
 
 DbSession().then(() => {
     app.listen(port, () => {
