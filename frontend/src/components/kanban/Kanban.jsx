@@ -45,9 +45,6 @@ const EMPTY_FORM = {
   dealValue: '', status: 'New', nextFollowUpDate: '', notes: '',
 };
 
-// ════════════════════════════════════════════════
-// MODALS (Create/Edit & Delete)
-// ════════════════════════════════════════════════
 const LeadModal = ({ mode, formData, onChange, onSubmit, onClose, loading }) => {
   const isEdit = mode === 'edit';
   return (
